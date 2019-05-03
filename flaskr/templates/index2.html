@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="colorlib.com">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.filepicker.js') }}"></script>
+  </head>
+  <body>
+    <div class="s131">
+      <div class="row" align="center">
+        <h1 style="position: relative; left: 511px; top: -103px; color: rgb(34, 187, 17);">VNExpress News</h1>
+      </div>
+      <div class="row">
+        <form>
+          <div class="inner-form">
+            <div class="input-field first-wrap">
+              <input id="search" type="text" placeholder="What are you looking for?" />
+            </div>
+            <div class="input-field second-wrap">
+              <div class="input-select">
+                <select data-trigger="" name="choices-single-defaul">
+                  <option placeholder="">All Category</option>
+                  <option>Subject A</option>
+                  <option>Subject B</option>
+                  <option>Subject C</option>
+                </select>
+              </div>
+            </div>
+            <div class="input-field third-wrap">
+              <a href="/search">
+                <button class="btn-search" type="submit">SEARCH</button>
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/extention/choices.js') }}"></script>
+    <script>
+      const choices = new Choices('[data-trigger]',
+      {
+        searchEnabled: false
+      });
+
+    </script>
+  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

@@ -1,0 +1,57 @@
+
+    body,html{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /*background: #e74c3c !important;*/
+    background-image: url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/Hnd01gaCiu89hpk4/videoblocks-large-and-small-particles-abstract-color-background-color-gradient-cloud-of-particles-business-cinematic-background-seamless-loop-place-for-text_suxgdz7kf_thumbnail-full01.png");
+    }
+
+    .searchbar{
+    margin-bottom: auto;
+    margin-top: auto;
+    height: 60px;
+    background-color: #fff;
+    border-radius: 30px;
+    padding: 10px;
+    border:1px solid coral;
+     box-shadow:0 0 5px coral;
+    }
+
+    .search_input{
+    color: black;
+    border: 0;
+    outline: 0;
+    background: none;
+    caret-color:transparent;
+    line-height: 40px;
+    padding: 0 10px;
+    width: 500px;
+    caret-color:red;
+    }
+
+
+    .searchbar:hover > .search_icon{
+    background: white;
+    color: #e74c3c;
+    }
+
+    .search_icon{
+    height: 40px;
+    width: 40px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color:coral;
+    }
+
+    .category {
+        margin-right: 10px;
+    }
+
+    em{
+    font-weight: bold;
+    }
