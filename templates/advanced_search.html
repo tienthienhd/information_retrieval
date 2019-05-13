@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+  {% include "logo.html" %}
+</div>
+<form action="/search_ad" method="GET">
+  <div class="form-group row">
+    <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputTitle" placeholder="Title" name="title">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+    <div class="col-sm-10">
+      <select class="custom-select my-1 mr-sm-2" id="inputCategory" name="category">
+        <option selected>Tất cả thể loại</option>
+        <option>Thời sự</option>
+        <option>Góc nhìn</option>
+        <option>Kinh doanh</option>
+        <option>Giải trí</option>
+        <option>Thể thao</option>
+        <option>Pháp luật</option>
+        <option>Giáo dục</option>
+        <option>Sức khoẻ</option>
+        <option>Đời sống</option>
+        <option>Du lịch</option>
+        <option>Khoa học</option>
+        <option>Số hóa</option>
+        <option>Ô tô - Xe máy</option>
+        <option>Ý kiến</option>
+        <option>Tâm sự</option>
+        <option>Cười</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputContent" class="col-sm-2 col-form-label">Content</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputContent" placeholder="Content" name="content">
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

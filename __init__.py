@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import os
 import urllib
 import urllib3
 import simplejson
 import json
+import time
 
 
 def create_app(test_config=None):
@@ -34,17 +35,33 @@ def create_app(test_config=None):
 
     @app.route('/search')
     def search():
+        start_q = time.time()
         keyword = request.args['keyword']
         category = request.args['category']
+        if 'start_result' in request.args:
+            start_result = request.args['start_result']
+        else:
+            start_result = 0
         if category == 'Tất cả thể loại':
             category = "*"
         http = urllib3.PoolManager()
-        url_query = "http://0.0.0.0:8983/solr/vnexpress/select?hl.fl=content&hl=on&q=content:{} and category:{}&wt=json".format(keyword, category)
+        url_query = "http://0.0.0.0:8983/solr/vnexpress/select?hl.fl=content&hl=on&q=content:{} and category:{}&wt=json&start={}".format(keyword, category, start_result)
         r = http.request('GET', url_query)
         response = r.data.decode('utf-8')
         response = json.loads(response, encoding='utf-8')
+        query_time = round(time.time() - start_q, 3)
+        error ='error' in response
 
-        return render_template('result.html', response=response)
+        if not error:
+            n_found = response['response']['numFound']
+            start_result = response['response']['start']
+            docs = response['response']['docs']
+            hl = response['highlighting']
+            # return jsonify(hl)
+            return render_template('result.html', n_found=n_found, query_time=query_time, start_result=start_result,
+                                   docs=docs, hl=hl, keyword=keyword, category=category)
+        else:
+            return render_template('result.html', error=True, keyword=keyword, category=category)
 
     @app.route('/result')
     def result():

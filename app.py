@@ -1,0 +1,113 @@
+from flask import Flask, render_template, request
+import os
+import urllib3
+import time
+import json
+import urllib
+
+from flask_paginate import Pagination, get_page_args
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+def query(keyword, offset, per_page):
+    start_time = time.time()
+    http = urllib3.PoolManager()
+    url_query = "http://0.0.0.0:8983/solr/vnexpress/select?hl.fl=content&hl.fragsize=400&hl=on&wt=json&start={}&rows={}&q={}".format(
+        offset, per_page, keyword)
+    r = http.request('GET', url_query)
+    response = r.data.decode('utf-8')
+    response = json.loads(response, encoding='utf-8')
+    query_time = round(time.time() - start_time, 3)
+
+    error = 'error' in response
+    if not error:
+        n_found = response['response']['numFound']
+        # start_result = response['response']['start']
+        docs = response['response']['docs']
+        hl = response['highlighting']
+        return query_time, n_found, docs, hl
+    return error
+
+@app.route('/search')
+def search():
+    page, per_page, offset = get_page_args(page_parameter='page',
+                                           per_page_parameter='per_page')
+    keyword = request.args['keyword']
+    results = query(keyword, offset, per_page)
+    if results == True:
+        return render_template('result.html', error=True)
+    query_time, n_found, docs, hl = results
+
+    pagination = Pagination(page=page, per_page=per_page, total=n_found,
+                            css_framework='bootstrap4')
+
+    return render_template('result.html', docs=docs, hl=hl, n_found=n_found, query_time=query_time,
+                           keyword=keyword,
+                           page=page, per_page=per_page, pagination=pagination)
+
+
+
+@app.route('/advanced_search')
+def advanced_seach():
+    return render_template('advanced_search.html')
+
+
+def advanced_query(title, category, content, offset, per_page):
+    if len(title) <= 1:
+        title = "*"
+    if category == 'Tất cả thể loại':
+        category = "*"
+    if len(content) <= 1:
+        content = "*"
+
+    url = "http://0.0.0.0:8983/solr/vnexpress/select"
+    params = "?hl.fl=content&hl.fragsize=400&hl=on&wt=json&start={}&rows={}&".format(offset, per_page)
+    input = "q=title%3A{}%20and%20category%3A{}%20and%20content%3A{}".format(offset, per_page, title, category, content)
+    start_time = time.time()
+    http = urllib3.PoolManager()
+    url_query = url + params + input
+    print(url_query)
+    r = http.request('GET', url_query)
+    response = r.data.decode('utf-8')
+    response = json.loads(response, encoding='utf-8')
+    query_time = round(time.time() - start_time, 3)
+
+    error = 'error' in response
+    if not error:
+        n_found = response['response']['numFound']
+        # start_result = response['response']['start']
+        docs = response['response']['docs']
+        if n_found > 0:
+            hl = response['highlighting']
+            return query_time, n_found, docs, hl
+
+        return True
+    return error
+
+@app.route('/search_ad')
+def search_ad():
+    title = request.args['title']
+    category = request.args['category']
+    content = request.args['content']
+
+    page, per_page, offset = get_page_args(page_parameter='page',
+                                           per_page_parameter='per_page')
+    results = advanced_query(title, category, content, offset, per_page)
+    if results == True:
+        return render_template('result.html', error=True)
+    query_time, n_found, docs, hl = results
+
+    pagination = Pagination(page=page, per_page=per_page, total=n_found,
+                            css_framework='bootstrap4')
+
+    return render_template('result.html', docs=docs, hl=hl, n_found=n_found, query_time=query_time,
+                           keyword=title+", "+category+", "+content,
+                           page=page, per_page=per_page, pagination=pagination)
+    return content
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)

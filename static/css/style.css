@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     /*background: #e74c3c !important;*/
-    background-image: url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/Hnd01gaCiu89hpk4/videoblocks-large-and-small-particles-abstract-color-background-color-gradient-cloud-of-particles-business-cinematic-background-seamless-loop-place-for-text_suxgdz7kf_thumbnail-full01.png");
+    /* background-image: url("https://images.unsplash.com/photo-1487925876428-ebd8a23ee1d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"); */
     }
 
     .searchbar{
@@ -13,7 +13,7 @@
     margin-top: auto;
     height: 60px;
     background-color: #fff;
-    border-radius: 30px;
+    border-radius: 15px;
     padding: 10px;
     border:1px solid coral;
      box-shadow:0 0 5px coral;
@@ -54,4 +54,20 @@
 
     em{
     font-weight: bold;
+    }
+
+    .logo{
+        margin-right: 20px;
+        font-size: 40px;
+        color: lime;
+        background: transparent;
+        font-family: serif;
+        /* top: 391px;
+        left: 436px;
+        position: relative; */
+        width: fit-content;
+    }
+
+    .capital {
+        color: orangered;
     }
