@@ -1,189 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="author" content="colorlib.com">
-  <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
-  <meta charset="UTF-8">
+  <title>Conceptual Search</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-
-  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="../static/node_modules/material-icons/iconfont/material-icons.css">
+  <link rel="stylesheet" href="../static/assets/css/material-kit.css?v=2.0.4" />
 </head>
-<body>
-<div class="container">
-
-  <div class="row" style="margin-bottom: 20px;">
-    <form class="form-inline d-flex justify-content-center h-100" action="/search" action="GET" id="search">
-
-      <a href="/">
-        <div class="logo">
-          <b class="capital">V</b>n<b class="capital">E</b>xpress <b class="capital">N</b>ews
+<body style="min-height: 100vh;">
+  <div style="background-image: url('../static/assets/img/images.jpeg'); background-repeat: repeat" class="h-100">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <div class="container-fluid">
+            <div class="row justify-content-center">
+              <div class="col-lg-9">
+                <div class="card w-100">
+                  <form action="/search" method="GET" class="navbar-form mb-0" id="search_form" autocomplete="off">
+                    <div class="card-body">
+                      <div class="input-group w-100">
+                        <input type="text" name="keyword" class="form-control mw-100 p-0" value="{{ keyword | replace('_', ' ') }}" placeholder="Tìm kiếm...">
+                        <button type="submit" class="btn btn-white btn-round btn-just-icon m-0 ml-3">
+                          <span class="material-icons text-primary">search</span>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </a>
-      <!-- {% include 'search_bar.html' %} -->
-
-      <div class="searchbar">
-        <input class="search_input" type="text" name="keyword" placeholder="{{ keyword }}" value="{{ keyword }}">
-        <input class="start_result" id="start_result" type="number" name="start_result" value="{{ start_result }}" hidden>
-        <!-- <select class="form-control category" name="category">
-          {% if category == "Tất cả thể loại" %}
-            <option selected>Tất cả thể loại</option>
-          {% else %}
-            <option>Tất cả thể loại</option>
-          {% endif %}
-
-          {% if category == "Thời sự" %}
-          <option selected>Thời sự</option>
-          {% else %}
-          <option>Thời sự</option>
-          {% endif %}
-
-          {% if category == "Góc nhìn" %}
-          <option selected>Góc nhìn</option>
-          {% else %}
-          <option>Góc nhìn</option>
-          {% endif %}
-
-          {% if category == "Kinh doanh" %}
-          <option selected>Kinh doanh</option>
-          {% else %}
-          <option>Kinh doanh</option>
-          {% endif %}
-
-          {% if category == "Giải trí" %}
-          <option selected>Giải trí</option>
-          {% else %}
-          <option>Giải trí</option>
-          {% endif %}
-
-          {% if category == "Thể thao" %}
-          <option selected>Thể thao</option>
-          {% else %}
-          <option>Thể thao</option>
-          {% endif %}
-
-          {% if category == "Pháp luật" %}
-          <option selected>Pháp luật</option>
-          {% else %}
-          <option>Pháp luật</option>
-          {% endif %}
-
-          {% if category == "Giáo dục" %}
-          <option selected>Giáo dục</option>
-          {% else %}
-          <option>Giáo dục</option>
-          {% endif %}
-
-          {% if category == "Sức khoẻ" %}
-          <option selected>Sức khoẻ</option>
-          {% else %}
-          <option>Sức khoẻ</option>
-          {% endif %}
-
-          {% if category == "Đời sống" %}
-          <option selected>Đời sống</option>
-          {% else %}
-          <option>Đời sống</option>
-          {% endif %}
-
-          {% if category == "Du lịch" %}
-          <option selected>Du lịch</option>
-          {% else %}
-          <option>Du lịch</option>
-          {% endif %}
-
-          {% if category == "Khoa học" %}
-          <option selected>Khoa học</option>
-          {% else %}
-          <option>Khoa học</option>
-          {% endif %}
-
-          {% if category == "Số hóa" %}
-          <option selected>Số hóa</option>
-          {% else %}
-          <option>Số hóa</option>
-          {% endif %}
-
-          {% if category == "Ô tô - Xe máy" %}
-          <option selected>Ô tô - Xe máy</option>
-          {% else %}
-          <option>Ô tô - Xe máy</option>
-          {% endif %}
-
-          {% if category == "Ý kiến" %}
-          <option selected>Ý kiến</option>
-          {% else %}
-          <option>Ý kiến</option>
-          {% endif %}
-
-          {% if category == "Tâm sự" %}
-          <option selected>Tâm sự</option>
-          {% else %}
-          <option>Tâm sự</option>
-          {% endif %}
-
-          {% if category == "Cười" %}
-          <option selected>Cười</option>
-          {% else %}
-          <option>Cười</option>
-          {% endif %}
-        </select> -->
-  
-        <a href="javascript:{}" onclick="document.getElementById('search').submit();" class="search_icon"><i class="fas fa-search"></i></a>
-        <input type="submit" style="position: absolute; left: -9999px"/>
       </div>
+      <hr>
 
-    </form>
-  </div>
+      <div class="row justify-content-around">
+        <div class="col-lg-9">
+          <div class="card">
+            <div id="data-container" class="card-body" >
+              {% if error == True or n_found == 0 %}
 
-  <hr>
-  {% if error == True or n_found == 0 %}
-  <div>Không tìm thấy {{ keyword }} trong tài liệu nào.</div>
-  {% else %}
-  <div class="row result">
+              <div class="h4">
+              Không tìm thấy &quot;{{ keyword | replace('_', ' ') }}&quot; trong tài liệu nào.
+              </div>
+
+              {% else %}
+              <div class="h4">
+              Kết quả tìm kiếm cho từ khóa: &quot;{{ keyword | replace('_', ' ') }}&quot; ({{ n_found }} kết quả trong {{ query_time }} giây.)
+              </div>
 
 
-    <ul class="list-group">
-      <div class="num_result" style="font-size: 12px; margin-left: 20px">{{ n_found }} kết quả({{ query_time }} giây)</div>
-      {% for doc in docs %}
-      <li class="list-group-item" style="border:none">
-        <h2>
-          <a href="{{ doc['url'][0] }}">{{ doc['title'][0] }}</a> <!--style="color:#609"-->
-        </h2>
-        <div class="caption">
-          <div class="attribution" style="color: #006621;">{{ doc['url'][0] }}</div>
-          {% if 'content' in  hl[doc['id']] %}
-            <p>{{ hl[doc['id']]['content'][0] | safe }}</p>
-          {% endif %}
+              {% for doc in docs %}
+                <div class="py-1">
+                  <a href="{{ doc['url'] }}" style="color:#609">
+                    <h4 class="mb-0">
+                      {{ doc['title'] | replace('_', ' ') }}
+                    </h4>
+                    <div class="d-inline-block">
+                      <cite style="color: #006621; word-wrap:break-word;">{{ doc['url'] }}</cite>
+                    </div>
+                  </a>
+
+                  {% if 'content' in  hl[doc['id']] %}
+                  <p class="mt-2">
+                    {{ hl[doc['id']]['content'][0] | safe | replace('_', ' ') }}
+                  </p>
+                  {% endif %}
+
+                  <hr/>
+                </div>
+              {% endfor %}
+
+
+              <div class="card-footer justify-content-center ">
+                {{ pagination.links }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
         </div>
-      </li>
-      {% endfor %}
-    </ul>
+      </div>
+    </div>
   </div>
-
-    {{ pagination.links }}
-
-  {% endif %}
-
-</div>
-
-<!-- 
-<script type="text/javascript">
-  function nextPage(page){
-    document.getElementById('start_result').value = page;
-    document.getElementById('search').submit();
-  }
-</script> -->
-
 </body>
 </html>

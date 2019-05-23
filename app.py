@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request
 import os
 import urllib3
+import requests
 import time
 import json
 import urllib
+from underthesea import word_tokenize
 
 from flask_paginate import Pagination, get_page_args
 
@@ -11,16 +13,22 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 def query(keyword, offset, per_page):
     start_time = time.time()
-    http = urllib3.PoolManager()
-    url_query = "http://0.0.0.0:8983/solr/vnexpress/select?hl.fl=content&hl.fragsize=400&hl=on&wt=json&start={}&rows={}&q={}".format(
+    url_query = "http://0.0.0.0:8983/solr/vnexpress/select?defType=dismax&&qf=title^0.3+content^0.5+category^0.2&hl.fl=content&hl.fragsize=400&hl=on&hl.simple.post=<%2Fb>&hl.simple.pre=<b>&wt=json&start={}&rows={}&q={}".format(
         offset, per_page, keyword)
-    r = http.request('GET', url_query)
-    response = r.data.decode('utf-8')
-    response = json.loads(response, encoding='utf-8')
+
+    response = requests.get(
+        url=url_query,
+        headers={
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+        },
+    )
+
+    response = json.loads(response.content, encoding='utf-8')
     query_time = round(time.time() - start_time, 3)
 
     error = 'error' in response
@@ -37,9 +45,14 @@ def search():
     page, per_page, offset = get_page_args(page_parameter='page',
                                            per_page_parameter='per_page')
     keyword = request.args['keyword']
+    keyword = word_tokenize(keyword, format='text')
+
     results = query(keyword, offset, per_page)
+
     if results == True:
+        print('error query')
         return render_template('result.html', error=True)
+
     query_time, n_found, docs, hl = results
 
     pagination = Pagination(page=page, per_page=per_page, total=n_found,
