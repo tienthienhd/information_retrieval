@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.jinja')
+    return render_template('index.html')
 
 def query(keyword, offset, per_page):
     start_time = time.time()
@@ -70,23 +70,27 @@ def advanced_seach():
 
 
 def advanced_query(title, category, content, offset, per_page):
+    print(title, category, content)
     if len(title) <= 1:
         title = "*"
     if category == 'Tất cả thể loại':
         category = "*"
     if len(content) <= 1:
         content = "*"
-
     url = "http://0.0.0.0:8983/solr/vnexpress/select"
-    params = "?hl.fl=content&hl.fragsize=400&hl=on&wt=json&start={}&rows={}&".format(offset, per_page)
-    input = "q=title%3A{}%20and%20category%3A{}%20and%20content%3A{}".format(offset, per_page, title, category, content)
+    params = "?qf=title^0.3+content^0.5+category^0.2&hl.fl=content&hl.fragsize=400&hl=on&hl.requireFieldMatch=true&hl.simple.post=</b>&hl.simple.pre=<b>&wt=json&start={}&rows={}&".format(offset, per_page)
+    input = "q=content:{} AND title:{} AND category:{}".format(content, title, category)
     start_time = time.time()
-    http = urllib3.PoolManager()
     url_query = url + params + input
     print(url_query)
-    r = http.request('GET', url_query)
-    response = r.data.decode('utf-8')
-    response = json.loads(response, encoding='utf-8')
+    response = requests.get(
+        url=url_query,
+        headers={
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+        },
+    )
+    response = json.loads(response.content, encoding='utf-8')
     query_time = round(time.time() - start_time, 3)
 
     error = 'error' in response
@@ -104,21 +108,26 @@ def advanced_query(title, category, content, offset, per_page):
 @app.route('/search_ad')
 def search_ad():
     title = request.args['title']
+    title = word_tokenize(title, format='text')
     category = request.args['category']
     content = request.args['content']
+    content = word_tokenize(content, format='text')
 
     page, per_page, offset = get_page_args(page_parameter='page',
                                            per_page_parameter='per_page')
     results = advanced_query(title, category, content, offset, per_page)
+
+    keyword = "title:" + title + ", category:" + category + ", content:" + content
+
     if results == True:
-        return render_template('result.html', error=True)
+        return render_template('result.html', error=True, keyword=keyword)
     query_time, n_found, docs, hl = results
 
     pagination = Pagination(page=page, per_page=per_page, total=n_found,
                             css_framework='bootstrap4')
 
     return render_template('result.html', docs=docs, hl=hl, n_found=n_found, query_time=query_time,
-                           keyword=title+", "+category+", "+content,
+                           keyword=keyword,
                            page=page, per_page=per_page, pagination=pagination)
     return content
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Conceptual Search</title>
+  <title>News Search</title>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -16,6 +16,13 @@
         <div class="col-lg-9">
           <div class="container-fluid">
             <div class="row justify-content-center">
+              <div class="col-lg-3">
+                <div class="card w-100">
+                  <div class="row justify-content-center">
+                    <h2 style="color: #006e01;">K<span style="color: #ff3f00;">3</span>T</h2>
+                  </div>
+                </div>
+              </div>
               <div class="col-lg-9">
                 <div class="card w-100">
                   <form action="/search" method="GET" class="navbar-form mb-0" id="search_form" autocomplete="off">
@@ -37,7 +44,7 @@
       <hr>
 
       <div class="row justify-content-around">
-        <div class="col-lg-9">
+        <div class="col-lg-10">
           <div class="card">
             <div id="data-container" class="card-body" >
               {% if error == True or n_found == 0 %}
@@ -50,7 +57,7 @@
               <div class="h4">
               Kết quả tìm kiếm cho từ khóa: &quot;{{ keyword | replace('_', ' ') }}&quot; ({{ n_found }} kết quả trong {{ query_time }} giây.)
               </div>
-
+              <hr/>
 
               {% for doc in docs %}
                 <div class="py-1">
